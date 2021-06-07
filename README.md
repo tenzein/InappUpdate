@@ -15,11 +15,12 @@ For more information on InApp Updates you can check the official [documentation]
 ## Add to project
 * Add to your project's root `build.gradle` file:  
 ```groovy
-buildscript {  
-    repositories {
-        jcenter()  
-    }
-}
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 ```
 * Add the dependency to your app `build.gradle` file
 ```groovy
