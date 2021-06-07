@@ -28,3 +28,13 @@ dependencies {
 	        implementation 'com.github.tenzein:InappUpdate:1.0.0'
 }
 ```
+implementing in Activity
+
+val inAppUpdateManager = InAppUpdateManager.Builder(this, REQ_CODE_VERSION_UPDATE)
+            ?.resumeUpdates(true)
+            ?.setMode(Constants.UpdateMode.FLEXIBLE)
+            ?.snackBarMessage("An Update has just been downloaded")
+            ?.snackBarAction("Restart")
+            ?.setHandler(this)
+
+        inAppUpdateManager?.checkForAppUpdate()
