@@ -38,3 +38,32 @@ implementing in Activity
             ?.snackBarAction("Restart")
             ?.setHandler(this) 
 	    inAppUpdateManager?.checkForAppUpdate()
+	    
+	
+implement handler to get the status of the update
+	
+	class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler {
+	
+	
+	}
+	
+	override fun onInAppUpdateError(code: Int, error: Throwable?) {
+        /*
+          * Called when some error occurred. See Constants class for more details
+          */
+        Log.d(TAG, "code: " + code, error)
+    }
+
+    override fun onInAppUpdateStatus(status: InAppUpdateStatus?) {
+        /*
+       * Called when the update status change occurred. See Constants class for more details
+       */
+
+        if (status != null) {
+            if (status.isDownloaded) {
+
+            }
+        }
+    }
+	
+	
