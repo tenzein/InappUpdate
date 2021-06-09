@@ -51,7 +51,7 @@ class InAppUpdateManager : LifecycleObserver {
     private var requestCode = 64534
     private var snackBarMessage = "An update has just been downloaded."
     private var snackBarAction = "RESTART"
-    private var mode: Constants.UpdateMode = Constants.UpdateMode.FLEXIBLE
+    var mode: Constants.UpdateMode = Constants.UpdateMode.FLEXIBLE
     private var resumeUpdates = true
     private var useCustomNotification = false
     private var handler: InAppUpdateHandler? = null
@@ -285,9 +285,9 @@ class InAppUpdateManager : LifecycleObserver {
     }
 
     private fun setupSnackBar() {
-        val rootView: View = activity.window.decorView.findViewById<View>(R.id.content)
+//        val rootView = this.activity.window.decorView.findViewById(R.id.content)
         snackbar = Snackbar.make(
-            rootView,
+            activity.findViewById(android.R.id.content),
             snackBarMessage,
             Snackbar.LENGTH_INDEFINITE
         )
