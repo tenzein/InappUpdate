@@ -7,9 +7,10 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
-import com.sherpa.inapp_update.Constants.UpdateMode
 import com.sherpa.inapp_update.InAppUpdateManager
 import com.sherpa.inapp_update.InAppUpdateStatus
+import com.sherpa.inapp_update.download.DownloadApkManager
+import com.sherpa.inapp_update.download.DownloadListener
 import com.sherpa.inappupdate.databinding.ActivityMainBinding
 
 
@@ -27,7 +28,21 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
         setContentView(binding.root)
 
 
-        inAppUpdateManager = InAppUpdateManager.Builder(this, REQ_CODE_VERSION_UPDATE)
+        val apkDownload = DownloadApkManager(this, "http://iptv.worldondemand.net/storage/uploads/market_app/apks/live_MOVIES_35_1614170668.apk", "live_MOVIES_35_1614170668")
+        apkDownload.start(object : DownloadListener {
+            override fun OnSuccess(dataPath: String?) {
+                // the file saved in your device..
+                //dataPath--> android/{your app package}/files/Download
+
+                Log.e( "OnSuccess: ", dataPath.toString())
+            }
+
+            override fun OnFailed(message: String?) {}
+            override fun OnPaused(message: String?) {}
+            override fun OnPending(message: String?) {}
+        })
+
+        /*inAppUpdateManager = InAppUpdateManager.Builder(this, REQ_CODE_VERSION_UPDATE)
             ?.resumeUpdates(true)
             ?.setHandler(this);
 
@@ -42,7 +57,7 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
         }
 
         binding.btUpdate.setOnClickListener { view -> inAppUpdateManager!!.checkForAppUpdate() }
-
+*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
