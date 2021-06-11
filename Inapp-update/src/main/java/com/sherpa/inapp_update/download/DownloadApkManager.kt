@@ -62,7 +62,7 @@ class DownloadApkManager(
         val txtProgressPercent = dialog.findViewById<TextView>(R.id.txtProgressPercent)
         val progressBar = dialog.findViewById<ProgressBar>(R.id.progressBar)
         dialog.show()
-        Thread {
+       val thread = Thread {
             while (true) {
                 val q = DownloadManager.Query()
                 q.setFilterById(downloadReference)
@@ -76,7 +76,7 @@ class DownloadApkManager(
                     dialog.dismiss()
                 }
                 val progress = (bytesDownloaded * 100L / bytesTotal).toInt()
-                Log.e("start: ", progress.toString())
+
                   context.runOnUiThread(Runnable {
                       txtProgressPercent.text = StringBuilder().append("Downloaded ").append(progress).append("%")
                       progressBar.progress = progress
@@ -123,7 +123,6 @@ class DownloadApkManager(
                                     savedFilePath
                                 )
                                 Toast.makeText(context,"Download Completed",Toast.LENGTH_SHORT).show()
-
                             }
                             DownloadManager.STATUS_FAILED -> downloadListener?.OnFailed(reason.toString())
                             DownloadManager.STATUS_PAUSED -> downloadListener?.OnPaused(reason.toString())

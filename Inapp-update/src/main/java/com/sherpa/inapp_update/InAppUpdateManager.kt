@@ -47,7 +47,7 @@ class InAppUpdateManager : LifecycleObserver {
     }
 
     private var activity: AppCompatActivity
-    private var appUpdateManager: AppUpdateManager? = null
+    private lateinit var appUpdateManager: AppUpdateManager
     private var requestCode = 64534
     private var snackBarMessage = "An update has just been downloaded."
     private var snackBarAction = "RESTART"
@@ -86,7 +86,8 @@ class InAppUpdateManager : LifecycleObserver {
         setupSnackBar()
         appUpdateManager = AppUpdateManagerFactory.create(activity)
         activity.lifecycle.addObserver(this)
-        if (mode === Constants.UpdateMode.FLEXIBLE) appUpdateManager!!.registerListener(
+        Log.e( "init: ", mode.toString())
+        if (mode === Constants.UpdateMode.FLEXIBLE) appUpdateManager.registerListener(
             installStateUpdatedListener
         )
         checkForUpdate(false)
@@ -166,7 +167,7 @@ class InAppUpdateManager : LifecycleObserver {
      * Triggers the completion of the app update for the flexible flow.
      */
     fun completeUpdate() {
-        appUpdateManager?.completeUpdate()
+        appUpdateManager.completeUpdate()
     }
 
     /**
@@ -175,8 +176,9 @@ class InAppUpdateManager : LifecycleObserver {
      */
     private fun checkForUpdate(startUpdate: Boolean) {
 
+        Log.e("TAG", "checkForUpdate: " )
         // Returns an intent object that you use to check for an update.
-        val appUpdateInfoTask: Task<AppUpdateInfo> = appUpdateManager!!.appUpdateInfo
+        val appUpdateInfoTask: Task<AppUpdateInfo> = appUpdateManager.appUpdateInfo
 
 
         // Checks that the platform will allow the specified type of update.
@@ -213,7 +215,7 @@ class InAppUpdateManager : LifecycleObserver {
 
     private fun startAppUpdateImmediate(appUpdateInfo: AppUpdateInfo) {
         try {
-            appUpdateManager?.startUpdateFlowForResult(
+            appUpdateManager.startUpdateFlowForResult(
                 appUpdateInfo,
                 AppUpdateType.IMMEDIATE,  // The current activity making the update request.
                 activity,  // Include a request code to later monitor this update request.
@@ -227,7 +229,7 @@ class InAppUpdateManager : LifecycleObserver {
 
     private fun startAppUpdateFlexible(appUpdateInfo: AppUpdateInfo) {
         try {
-            appUpdateManager?.startUpdateFlowForResult(
+            appUpdateManager.startUpdateFlowForResult(
                 appUpdateInfo,
                 AppUpdateType.FLEXIBLE,  // The current activity making the update request.
                 activity,  // Include a request code to later monitor this update request.
@@ -256,8 +258,8 @@ class InAppUpdateManager : LifecycleObserver {
      */
     private fun checkNewAppVersionState() {
         appUpdateManager
-            ?.appUpdateInfo
-            ?.addOnSuccessListener { appUpdateInfo ->
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
                 inAppUpdateStatus.setAppUpdateInfo(appUpdateInfo)
 
                 //FLEXIBLE:
@@ -294,12 +296,12 @@ class InAppUpdateManager : LifecycleObserver {
         snackbar!!.setAction(
             snackBarAction,
             View.OnClickListener { // Triggers the completion of the update of the app for the flexible flow.
-                appUpdateManager?.completeUpdate()
+                appUpdateManager.completeUpdate()
             })
     }
 
     private fun unregisterListener() {
-        if (appUpdateManager != null) appUpdateManager!!.unregisterListener(
+        appUpdateManager.unregisterListener(
             installStateUpdatedListener
         )
     }
@@ -319,20 +321,8 @@ class InAppUpdateManager : LifecycleObserver {
     companion object {
         private const val LOG_TAG = "InAppUpdateManager"
 
-        private var instance: InAppUpdateManager? = null
+        private lateinit var instance: InAppUpdateManager
 
-        /**
-         * Creates a builder that uses the default requestCode.
-         *
-         * @param activity the activity
-         * @return a new [InAppUpdateManager] instance
-         */
-        fun Builder(activity: AppCompatActivity): InAppUpdateManager? {
-            if (instance == null) {
-                instance = InAppUpdateManager(activity)
-            }
-            return instance
-        }
 
         /**
          * Creates a builder
@@ -341,11 +331,10 @@ class InAppUpdateManager : LifecycleObserver {
          * @param requestCode the request code to later monitor this update request via onActivityResult()
          * @return a new [InAppUpdateManager] instance
          */
-        fun Builder(activity: AppCompatActivity, requestCode: Int): InAppUpdateManager? {
-            if (instance == null) {
-                instance = InAppUpdateManager(activity, requestCode)
-            }
-            return instance
+        fun Builder(activity: AppCompatActivity, requestCode: Int): InAppUpdateManager {
+            Log.e(LOG_TAG, "Builder: ")
+            return  InAppUpdateManager(activity, requestCode)
+
         }
     }
 }

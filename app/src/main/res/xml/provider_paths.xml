@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path
+        name="new_apk"
+        path="file:///storage/emulated/0/Android/data/com.sherpa.inappupdate/files/Download/" />
+</paths>
