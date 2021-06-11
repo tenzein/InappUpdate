@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.sherpa.inapp_update.Constants
 import com.sherpa.inapp_update.InAppUpdateManager
 import com.sherpa.inapp_update.InAppUpdateStatus
 import com.sherpa.inapp_update.download.DownloadApkManager
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
     private val TAG = MainActivity::class.java.simpleName
     private val PERMISSION_REQUEST_CODE = 200
 
-    private lateinit var binding:ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var inAppUpdateManager: InAppUpdateManager
 
@@ -40,11 +39,13 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-       /* if (checkPermission()) {
+/*
+* if you want to download the apk from certain link to update your app
+* */
+        if (checkPermission()) {
             val apkDownload = DownloadApkManager(
                 this,
-                "http://iptv.worldondemand.net/storage/uploads/market_app/apks/live_MOVIES_35_1614170668.apk",
+                "",
                 "live_MOVIES_35_1614170668"
             )
             apkDownload.start(object : DownloadListener {
@@ -62,10 +63,13 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
                 override fun OnPending(message: String?) {}
             })
         } else {
-            requestPermission();
-        }*/
+            requestPermission()
+        }
 
-        inAppUpdateManager = InAppUpdateManager.Builder(this, REQ_CODE_VERSION_UPDATE)
+        /*
+        * for inapp update
+        * */
+        /*inAppUpdateManager = InAppUpdateManager.Builder(this, REQ_CODE_VERSION_UPDATE)
             .resumeUpdates(true)
             .setHandler(this);
 
@@ -79,8 +83,10 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
             }
         }
 
-        binding.btUpdate.setOnClickListener { view -> inAppUpdateManager.checkForAppUpdate() }
+        binding.btUpdate.setOnClickListener { view -> inAppUpdateManager.checkForAppUpdate() }*/
+
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -134,7 +140,7 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
     }
 
 
-    private fun installApk(filePath:String) {
+    private fun installApk(filePath: String) {
         try {
 
             val file = File(filePath)
@@ -176,13 +182,13 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
             if (resultCode == Activity.RESULT_CANCELED) {
                 // If the update is cancelled by the user,
                 // you can request to start the update again.
-                inAppUpdateManager?.checkForAppUpdate();
+                inAppUpdateManager.checkForAppUpdate()
 
-                Log.d(TAG, "Update flow failed! Result code: " + resultCode);
+                Log.d(TAG, "Update flow failed! Result code: " + resultCode)
             }
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onInAppUpdateError(code: Int, error: Throwable?) {
@@ -208,7 +214,9 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
          */
         binding.progressBar.visibility = if (status!!.isDownloading) View.VISIBLE else View.GONE
 
-        binding.tvAvailableVersion.text = StringBuilder().append("current verson code").append(BuildConfig.VERSION_CODE).append("\nAvailable version code: ").append(status.availableVersionCode())
+        binding.tvAvailableVersion.text =
+            StringBuilder().append("current verson code").append(BuildConfig.VERSION_CODE)
+                .append("\nAvailable version code: ").append(status.availableVersionCode())
 
         binding.tvUpdateAvailable.text = String.format(
             "Update available: %s", java.lang.String.valueOf(
@@ -218,7 +226,7 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
 
         if (status.isDownloaded) {
             binding.btUpdate.text = "Complete Update"
-            binding.btUpdate.setOnClickListener { view -> inAppUpdateManager!!.completeUpdate() }
+            binding.btUpdate.setOnClickListener { view -> inAppUpdateManager.completeUpdate() }
         }
     }
 }
