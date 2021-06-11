@@ -67,3 +67,14 @@ implement handler to get the status of the update
     }
 	
 	
+NOTE: 
+Test with internal app sharing
+Use internal app sharing to test in-app updates by performing the following steps:
+
+Make sure your test device has a version of your app installed that supports in-app updates and was installed using an internal app sharing URL.
+
+Follow the Play Console instructions to share your app internally. Upload a version of your app that uses a version code that is higher than the one you already have installed on the test device.
+
+On the test device, click the internal app sharing link for the updated version of your app but do not install the app from the Play Store page that appears after you click the link.
+
+Open the app from the device's app drawer or home screen. The update should now be available to your app, and you can test your implementation of in-app updates.
