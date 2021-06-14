@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), InAppUpdateManager.InAppUpdateHandler 
                 if (locationAccepted && cameraAccepted) {
                     val apkDownload = DownloadApkManager(
                         this,
-                        "http://iptv.worldondemand.net/storage/uploads/market_app/apks/live_MOVIES_35_1614170668.apk",
+                        "",
                         "new_apk"
                     )
                     apkDownload.start(object : DownloadListener {
